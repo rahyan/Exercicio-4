@@ -1,6 +1,7 @@
 package calculator;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 
 class CalculatorInput {
@@ -13,12 +14,16 @@ class CalculatorInput {
 		engine = e;
 	}
 	
-	void run() throws Exception {
+	void run() {
 		for (;;) {
 			System.out.print("[" + engine.display() + "]");
-			String m = stream.readLine();
-			if (m == null) break;
-			if (m.length() > 0) {
+			String m;
+
+			try {
+				m = stream.readLine();
+			
+				if (m == null) break;
+				if (m.length() > 0) {
 				char c = m.charAt(0);
 				if (c == '+') engine.add();
 				else if (c == '-') engine.subtract();
@@ -27,6 +32,9 @@ class CalculatorInput {
 				else if (c >= '0' && c <= '9') engine.digit(c - '0');
 				else if (c == '=') engine.compute();
 				else if (c == 'c' || c == 'C') engine.clear();
+				}
+			} catch (IOException e) {
+				engine.clear();
 			}
 		}
 	}
